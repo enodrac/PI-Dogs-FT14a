@@ -3,31 +3,29 @@ const {Dog, Temperament} = require('../db');
 const {Op} = require('sequelize');
 
 router.get('/', (req, res) => {
-    let {name, temperament, orderby, what} = req.query;
-    if (temperament) {
-        Dog.findAll({include: {model: Temperament, where: {name: temperament}, order: [['id', 'ASC']], through: {attributes: []}}})
+    let {name, temps, orderby, what} = req.query;
+    if (temps) {
+        console.log(temps);
+        Dog.findAll({include: {model: Temperament, where: {name: temps}, order: [['id', 'ASC']]}})
             .then((response) => res.send(response))
-            .catch((err) => console.log('error api get 3'));
+            .catch((err) => console.log('error api get 1'));
     } else if (name) {
         Dog.findAll({where: {name: {[Op.iLike]: '%' + name + '%'}}, order: [['id', 'ASC']], include: {model: Temperament}})
             .then((response) => res.send(response))
-            .catch((err) => console.log('error api get 1'));
+            .catch((err) => console.log('error api get 2'));
     } else {
-        if (orderby === 'undefined') orderby = 'ASC';
-        if (what === 'undefined') what = 'name';
         Dog.findAll({include: {model: Temperament}, order: [[what, orderby]]})
             .then((response) => res.send(response))
-            .catch((err) => console.log('error api get 2'));
+            .catch((err) => console.log('error api get 3'));
     }
 });
 
 router.get('/:breedId', (req, res) => {
-    console.log('CCCCCCCCCCCC');
     const {breedId} = req.params;
     if (breedId) {
         Dog.findOne({where: {id: breedId}, include: {model: Temperament}})
             .then((response) => res.send(response))
-            .catch((err) => console.log('error api get 3'));
+            .catch((err) => console.log('error api get 4'));
     }
 });
 
@@ -36,14 +34,15 @@ router.get('/:breedId', (req, res) => {
 //POST
 
 router.post('/', async (req, res) => {
-    const {name, weight, height, life_span, temperaments} = req.body;
+    const {name, weight_min, weight_max, height, life_span, temperaments, img} = req.body;
     try {
         var newDog = await Dog.create({
             name: name,
-            weight: weight,
+            weight_min: weight_min,
+            weight_max: weight_max,
             height: height,
             life_span: life_span,
-            img: '',
+            img: img,
             created: 'true',
         });
 
@@ -53,13 +52,13 @@ router.post('/', async (req, res) => {
                     var temper = await Temperament.findOne({where: {name: tem}});
                     newDog.addTemperament(temper);
                 } catch (err) {
-                    console.log('error 2');
+                    console.log('error api post 1');
                 }
             });
         }
         res.send(newDog);
     } catch (err) {
-        console.log('error 1');
+        console.log('error api post 2');
     }
 });
 

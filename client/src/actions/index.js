@@ -8,7 +8,7 @@ export function getDogs(name, orderby, what) {
     if (name instanceof Array) {
         return (dispatch) => {
             axios
-                .get(`http://localhost:3001/dogs?temperament=${name}`)
+                .get(`http://localhost:3001/dogs?temps=${name}`)
                 .then((response) => dispatch({type: SET_DOGS, payload: response.data}))
                 .catch((err) => console.log('error get 1'));
         };
@@ -30,7 +30,6 @@ export function getDogs(name, orderby, what) {
 }
 
 export function getDetail(breedId) {
-    console.log('BBBBBBBBB');
     return (dispatch) => {
         axios
             .get(`http://localhost:3001/dogs/${breedId}`)
