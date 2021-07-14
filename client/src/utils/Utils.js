@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 export function pageCount(items, selected) {
     let aux = [];
     let count = 0;
@@ -14,9 +15,11 @@ export function pageCount(items, selected) {
     return aux;
 }
 
-export function handleSearch(e,dogsStore, setSelected){
-    if(e.target.value.length){
-        setSelected([...dogsStore.filter((dog) => dog.name.includes(e.target.value))])
+export function handleSearch(e, dogsStore, setSelected) {
+    if (e.target.value.length) {
+        setSelected([...dogsStore.filter((dog) => dog.name.toLowerCase().includes(e.target.value.toLowerCase()))]);
+    } else {
+        setSelected([...dogsStore]);
     }
 }
 
@@ -30,25 +33,35 @@ export function handleSelected(e, dogsStore, setSelected) {
     }
 }
 
-export function handleAddTemp(e, temperament, dispatch, getDogs) {
+export function handleAddTemp(e, temperament, setSelected, selected) {
     if (!temperament.includes(e.target.value) && e.target.value !== 'x') {
         let aux = temperament;
         aux.push(e.target.value);
         if (temperament.length) {
-            dispatch(getDogs(temperament));
+            setSelected(
+                selected.filter((dog) => {
+                    let aux = dog.Temperaments.map((temp) => temp.name);
+                    if (temperament.every((e) => aux.includes(e))) return dog;
+                })
+            );
         }
     }
 }
 
-export function removeTemp(t, temperament, setTemperament, dispatch, getDogs) {
+export function handleRemoveTemp(t, temperament, setTemperament, setSelected, selected, dogsStore) {
     let aux = temperament;
     let index = aux.indexOf(t);
     aux.splice(index, 1);
     setTemperament([...aux]);
     if (temperament.length) {
-        dispatch(getDogs(temperament));
+        setSelected(
+            dogsStore.filter((dog) => {
+                let aux = dog.Temperaments.map((temp) => temp.name);
+                if (temperament.every((e) => aux.includes(e))) return dog;
+            })
+        );
     } else {
-        dispatch(getDogs('', 'ASC', 'name'));
+        setSelected(dogsStore);
     }
 }
 

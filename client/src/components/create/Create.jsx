@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import './Create.css'
 import React,{ useEffect, useState} from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import { createDog, getTemperaments } from '../../actions';
 
-function Dogs(){
+export default function Create(){
     
 const temperaments = useSelector((state) => state.temperaments);
 const dispatch = useDispatch()
@@ -16,7 +17,6 @@ useEffect(()=>{
         ...dog,
         temperaments: [...temperament]
       })
-// eslint-disable-next-line react-hooks/exhaustive-deps
 },[temperament])
 
 useEffect(()=>{
@@ -69,7 +69,7 @@ function handleSubmit(e){
                 
                 <input onBlur={handleChange} name="life_span" type="text" placeholder='Life Span'/>
 
-                <input onChange={(e) => handleChange(e)} name="img" type="text" required placeholder='https://doge.img'/>
+                <input onChange={(e) => handleChange(e)} name="img" type="text" placeholder='https://doge.img'/>
 
                 <select className="temperaments" onChange={handleAddTemp} >
                     <option value='x'>Temperaments...</option>
@@ -95,5 +95,3 @@ function handleSubmit(e){
         </div>
     )
 }
-
-export default Dogs

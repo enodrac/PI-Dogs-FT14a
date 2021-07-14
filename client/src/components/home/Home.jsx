@@ -3,9 +3,9 @@
 import './Home.css'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
-import {getDogs, getTemperaments } from '../../actions/index'
+import {getDogs, getTemperaments, resetDetail } from '../../actions/index'
 import { useDispatch, useSelector } from "react-redux";
-import {pageCount,handleSearch,handleAddTemp,handleSelected,removeTemp,handleOrder,handlePages,handleChangeItems} from '../../utils/Utils'
+import {pageCount,handleSearch,handleAddTemp,handleSelected,handleRemoveTemp,handleOrder,handlePages,handleChangeItems} from '../../utils/Utils'
 import Dog from '../dog/Dog'
 
 export default function Home() {
@@ -18,18 +18,21 @@ export default function Home() {
     const [pag, setPag] = useState({ pages: [], n: 1, max: [], items:9})
 
     useEffect(() => {
+        dispatch(resetDetail())
+        dispatch(getDogs('', 'ASC', 'name'))
+        dispatch(getTemperaments())
+    }, [dispatch])
+
+    useEffect(() => {
         setSelected([...dogsStore])
     }, [dogsStore])
 
     useEffect(() => {
         let aux = pageCount(pag.items,selected)
-        setPag({...pag, pages: [...selected.slice(0, 9)],max:aux, n: 1})
+        setPag({...pag, pages: [...selected.slice(0, 9)],max:aux, n: 1}) 
+        
+        
     }, [selected])
-
-    useEffect(() => {
-        dispatch(getDogs('', 'ASC', 'name'))
-        dispatch(getTemperaments())
-    }, [dispatch])
 
     return (
         <div className='render-div'>
@@ -38,24 +41,27 @@ export default function Home() {
             
             <div className='div-inputs'>
 
-                <Link className='home-link' to={'/create'} >Create Dogs</Link>
+                <div >
 
-                {/* <input onChange={(e) => e.target.value.length? dispatch(getDogs(e.target.value)) : dispatch(getDogs('', 'ASC', 'name')) } type="text" placeholder='Breed' /> */}
-                <input onChange={(e) => e.target.value.length? handleSearch(e,dogsStore,setSelected) : dispatch(getDogs('', 'ASC', 'name')) } type="text" placeholder='Breed' />
-                
-                <select onChange={(e)=> handleAddTemp(e,temperament,dispatch,getDogs)} >
-                    <option value='x'>Temperaments...</option>
-                    {temperaments.map((e) => (
-                        <option key={e.id}>{e.name}</option>
-                    ))}
-                </select>
+                    <Link className='home-link' to={'/create'} >Create Dogs</Link>
+
+                    <input onChange={(e) => handleSearch(e,dogsStore,setSelected) } type="text" placeholder='Breed' />
+                    
+                    <select onChange={(e)=> handleAddTemp(e,temperament,setSelected, selected)} >
+                        <option value='x'>Temperaments...</option>
+                        {temperaments.map((e) => (
+                            <option key={e.id}>{e.name}</option>
+                        ))}
+                    </select>
+
+                </div>
 
                 <div>
 
                     {temperament.map((t, i) => (
                         <div key={i}>
                             <label>{t}</label>
-                            <button onClick={e => removeTemp(t, temperament, setTemperament, dispatch, getDogs)}>x</button>
+                            <button className='index' onClick={e => handleRemoveTemp(t, temperament, setTemperament, setSelected, selected,dogsStore)}>x</button>
                         </div>
                     ))} 
 

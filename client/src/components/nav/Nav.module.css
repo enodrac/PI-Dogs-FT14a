@@ -1,0 +1,39 @@
+.nav_render_div {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-evenly;
+    align-items: center;
+    position: absolute;
+    margin: 20px;
+    padding: 15px;
+    right: 30px;
+    width: 350px;
+}
+
+.username {
+    padding: 10px;
+    font-size: 20px;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    background-color: #279abd;
+    box-shadow: 0 9px #1b6c85;
+    text-decoration: none;
+}
+
+.nav_button {
+    padding: 10px;
+    font-size: 20px;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    background-color: #279abd;
+    box-shadow: 0 9px #1b6c85;
+    text-decoration: none;
+}
+
+.nav_button:active {
+    background: #4ed6ff;
+    box-shadow: 0 5px #0b6783;
+    transform: translateY(4px);
+}

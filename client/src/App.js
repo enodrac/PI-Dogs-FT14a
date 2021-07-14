@@ -4,12 +4,20 @@ import Create from './components/create/Create';
 import Home from './components/home/Home';
 import Landing from './components/landing/Landing';
 import Detail from './components/detail/Detail';
+import Nav from './components/nav/Nav';
+import Login from './components/login/Login';
 
 function App() {
     return (
         <div className="App">
+            <Route path="/home">
+                <Nav />
+            </Route>
             <Route exact path="/">
                 <Landing />
+            </Route>
+            <Route exact path="/login">
+                <Login />
             </Route>
             <Route path="/home">
                 <Home />

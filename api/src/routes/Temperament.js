@@ -2,7 +2,7 @@ const router = require('express').Router();
 const {Temperament} = require('../db');
 
 router.get('/', async (req, res) => {
-    Temperament.findAll()
+    Temperament.findAll({order: [['name', 'ASC']]})
         .then((response) => res.send(response))
 
         .catch((err) => console.log('error 5'));

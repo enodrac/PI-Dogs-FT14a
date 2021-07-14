@@ -3,16 +3,12 @@ const {Dog, Temperament} = require('../db');
 const {Op} = require('sequelize');
 
 router.get('/', (req, res) => {
-    let {name, temps, orderby, what} = req.query;
+    let {temps, orderby, what} = req.query;
     if (temps) {
         console.log(temps);
         Dog.findAll({include: {model: Temperament, where: {name: temps}, order: [['id', 'ASC']]}})
             .then((response) => res.send(response))
             .catch((err) => console.log('error api get 1'));
-    } else if (name) {
-        Dog.findAll({where: {name: {[Op.iLike]: '%' + name + '%'}}, order: [['id', 'ASC']], include: {model: Temperament}})
-            .then((response) => res.send(response))
-            .catch((err) => console.log('error api get 2'));
     } else {
         Dog.findAll({include: {model: Temperament}, order: [[what, orderby]]})
             .then((response) => res.send(response))
@@ -46,7 +42,7 @@ router.post('/', async (req, res) => {
             created: 'true',
         });
 
-        if (temperaments) {
+        if (temperaments.length) {
             temperaments.map(async (tem) => {
                 try {
                     var temper = await Temperament.findOne({where: {name: tem}});
@@ -59,6 +55,26 @@ router.post('/', async (req, res) => {
         res.send(newDog);
     } catch (err) {
         console.log('error api post 2');
+    }
+});
+
+//POST
+//////////////////////////////////////////////////////////////////////////////////
+//PUT
+
+router.put('/:breedId', (req, res) => {});
+
+//PUT
+//////////////////////////////////////////////////////////////////////////////////
+//DELETE
+
+router.delete('/:breedId', (req, res) => {
+    const {breedId} = req.params;
+    try {
+        Dog.destroy({where: {id: breedId}});
+        res.sendStatus(200);
+    } catch (err) {
+        console.log('error api delete 1');
     }
 });
 

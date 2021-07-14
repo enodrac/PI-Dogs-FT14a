@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 
-function Home(){
+export default function Landing(){
 
     return(
         <div>
@@ -10,5 +10,3 @@ function Home(){
         </div>
     )
 }
-
-export default Home

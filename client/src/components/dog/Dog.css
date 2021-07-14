@@ -19,13 +19,15 @@
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
 }
 
-.div-dog-temperaments {
+.div-dog-info {
     display: flex;
-    flex-direction: column;
-    max-height: 400px;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 35px;
 }
 
 .div-dog-temperaments {
+    max-height: 400px;
     overflow-y: auto;
     overflow-x: hidden;
     flex: 1;
@@ -42,18 +44,16 @@
     top: 5px;
 }
 
-.div-dog-info {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-top: 35px;
-}
-
 .div-dog-img {
     width: 350px;
     height: 350px;
     margin-bottom: 35px;
     padding: 15px;
+}
+
+.link-dog {
+    color: white;
+    text-decoration: none;
 }
 
 .dog-img {

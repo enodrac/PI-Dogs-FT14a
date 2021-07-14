@@ -1,9 +1,10 @@
-import {SET_DETAIL, SET_DOGS, SET_TEMPERAMENTS} from '../actions';
+import {SET_DETAIL, SET_DOGS, SET_TEMPERAMENTS, RESET_DETAIL, SET_USER} from '../actions';
 
 const initialState = {
     dogs: [],
     detail: {},
     temperaments: [],
+    user: {},
 };
 
 export default function rootReducer(state = initialState, action) {
@@ -14,6 +15,10 @@ export default function rootReducer(state = initialState, action) {
             return {...state, temperaments: action.payload};
         case SET_DETAIL:
             return {...state, detail: action.payload};
+        case RESET_DETAIL:
+            return {...state, detail: action.payload};
+        case SET_USER:
+            return {...state, user: action.payload};
         default:
             return {...state};
     }
