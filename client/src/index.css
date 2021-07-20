@@ -1,12 +1,13 @@
 body {
-    background: linear-gradient(180deg, #001021 35%, #034748 100%);
+    background-image: url(https://cdn.discordapp.com/attachments/842507308956778520/867087252931870750/patron_4.png),
+        linear-gradient(180deg, #001021 35%, #034748 100%);
     margin: 0;
-    background-repeat: no-repeat;
     background-attachment: fixed;
     font-family: cursive;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: white;
+    font-weight: bold;
 }
 
 input {

@@ -2,7 +2,7 @@ import styles from './Detail.module.css'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { deleteDog, getDetail, getDogs} from '../../actions';
+import { deleteDog, getDetail, getDogs, addFavorite} from '../../actions';
 
 
 function Detail() {
@@ -12,34 +12,46 @@ function Detail() {
     useEffect(()=>{
         dispatch(getDetail(parseInt(window.location.href.split(':').pop())))
      },[dispatch])
-     
+
+    function handleAdd(){
+        addFavorite(detailStore.id,sessionStorage.getItem('userName'))
+    }
+
     return (
         <div>
             {detailStore.id ?
                 <div>
-
-                <div>{console.log(detailStore)}</div>
                    
                     <div className={styles.detail_container}>
 
-                        <div >
+                        <div className={styles.frame}>
                             <img className={styles.detail_img} src={detailStore.img} alt="" />
                         </div>
 
-                        <div>
+                        <div className={styles.detail_info_container}>
 
                              <h1>Dog detail</h1>
 
+                             <div className={styles.div_delFav}>
                                 <Link to={'/home'}>
-                                    <button onClick={() => {deleteDog(detailStore.id); dispatch(getDogs('', 'ASC', 'name'))}}>X</button>
+                                    <button className={styles.delete_button} onClick={() => {deleteDog(detailStore.id); dispatch(getDogs('', 'ASC', 'name'))}}>Delete</button>
                                 </Link>
+
+                                <div>{sessionStorage.getItem('userName') !== null ?
+                                    <button className={styles.delete_button} onClick={() => handleAdd()}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M91.6 13A28.7 28.7 0 0 0 51 13l-1 1-1-1A28.7 28.7 0 0 0 8.4 53.8l1 1L50 95.3l40.5-40.6 1-1a28.6 28.6 0 0 0 0-40.6z"/></svg>
+                                        FAV
+                                    </button>
+                                    :null
+                                }</div>
+                                
+                             </div>
                         
                             <div className={styles.detail_dog_info}>
 
                                 <div key={detailStore.id}>
                                     <p> {detailStore.name}</p>
-                                    <p>Weight Min: {detailStore.weight_min}</p>
-                                    <p>Weight max: {detailStore.weight_max}</p>
+                                    <p>Weight Min: {detailStore.weight_min}  Max: {detailStore.weight_max}</p>
                                     <p>height: {detailStore.height}</p>
                                     <p>life span: {detailStore.life_span}</p>
                                 </div>
@@ -60,7 +72,7 @@ function Detail() {
 
                 </div>
                 : 
-                <h2>The dog don't exist</h2>
+                <h2>The dog doesn't exist</h2>
             }
         </div>
     )

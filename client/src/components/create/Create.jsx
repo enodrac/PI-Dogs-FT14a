@@ -3,16 +3,20 @@ import './Create.css'
 import React,{ useEffect, useState} from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import { createDog, getTemperaments } from '../../actions';
+import { authenticate } from '../../utils/Utils';
+import { useHistory } from 'react-router-dom';
 
 export default function Create(){
     
 const temperaments = useSelector((state) => state.temperaments);
 const dispatch = useDispatch()
+const history = useHistory()
 
 const [dog,setDog] = useState({name:'',weight_min:1,weight_max:2,height:'',life_span:'',img:'',temperaments:[]})
 const [temperament,setTemperament] = useState([])
 
 useEffect(()=>{
+    authenticate(history)
     setDog({
         ...dog,
         temperaments: [...temperament]

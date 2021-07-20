@@ -1,11 +1,12 @@
+import style from './Landing.module.css'
 import React from 'react'
 import { Link } from 'react-router-dom';
 
 export default function Landing(){
 
     return(
-        <div>
-            <h1>Proyecto Individual</h1>
+        <div className={style.image}>
+            <label>Proyecto Individual</label>
             <Link to={'/home'} >Home</Link>
         </div>
     )

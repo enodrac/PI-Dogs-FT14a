@@ -1,0 +1,122 @@
+.render_div {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.div-inputs {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+}
+.div-dogs-container {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.div-dogs-buttons {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.prev {
+    padding: 10px;
+    font-size: 24px;
+    color: #fff;
+    background: linear-gradient(0deg, #0caadc 0%, #279abd 100%);
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #0b6783;
+    position: absolute;
+    margin-left: -460px;
+}
+
+.next {
+    padding: 10px;
+    font-size: 24px;
+    color: #fff;
+    background: linear-gradient(0deg, #0caadc 0%, #279abd 100%);
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #0b6783;
+    position: absolute;
+    margin-left: 460px;
+}
+
+.next:active {
+    background: #4ed6ff;
+    box-shadow: 0 5px #0b6783;
+    transform: translateY(4px);
+}
+
+.prev:active {
+    background: #4ed6ff;
+    box-shadow: 0 5px #0b6783;
+    transform: translateY(4px);
+}
+
+.home-link {
+    padding: 10px;
+    font-size: 24px;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    background-color: #279abd;
+    box-shadow: 0 9px #1b6c85;
+    justify-content: center;
+    width: 140px;
+    text-decoration: none;
+}
+
+.home-link:active {
+    background: #4ed6ff;
+    box-shadow: 0 5px #0b6783;
+    transform: translateY(4px);
+}
+
+.index {
+    padding: 5px;
+    margin: 2px;
+    font-size: 20px;
+    color: white;
+    background: linear-gradient(0deg, #0caadc 0%, #279abd 100%);
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #0b6783;
+}
+
+.click-index {
+    padding: 5px;
+    margin: 2px;
+    font-size: 20px;
+    color: white;
+    background: linear-gradient(0deg, #0caadc 0%, #279abd 100%);
+    border: none;
+    border-radius: 15px;
+    background: #4ed6ff;
+    box-shadow: 0 5px #0b6783;
+    transform: translateY(4px);
+}
+
+.index:active {
+    background: #4ed6ff;
+    box-shadow: 0 5px #0b6783;
+    transform: translateY(4px);
+}
+
+/* 
+    color pallet
+    001021
+    034748
+    1481BA
+    11B5E4
+    0CAADC
+
+*/

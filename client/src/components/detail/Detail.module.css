@@ -3,16 +3,25 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    margin: 15px;
     font-size: 30px;
     overflow: hidden;
+    height: 100vh;
+}
+
+.detail_info_container {
+    background: linear-gradient(180deg, #001021 35%, #034748 100%);
+    border-radius: 20px;
+    border: white solid 2px;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+}
+
+.div_delFav {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 .detail_dog_info {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
     margin: 30px;
     width: 800px;
 }
@@ -25,5 +34,62 @@
 }
 
 .detail_img {
-    max-width: 700px;
+    max-width: 730px;
+    border-bottom-color: #ffe;
+    border-left-color: #eed;
+    border-right-color: #eed;
+    border-top-color: #ccb;
+}
+
+.frame {
+    border-radius: 20px;
+    background-color: #ddc;
+    border: solid 5vmin #eee;
+    border-bottom-color: #fff;
+    border-left-color: #eee;
+    border-right-color: #eee;
+    border-top-color: #ddd;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25) inset, 0 5px 10px 5px rgba(0, 0, 0, 0.25);
+    box-sizing: border-box;
+    padding: 10px 10px 0px 10px;
+    display: inline-block;
+    position: relative;
+    margin: 30px;
+}
+.frame:before {
+    border-radius: 20px;
+    bottom: -2vmin;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.25) inset;
+    content: '';
+    left: -2vmin;
+    position: absolute;
+    right: -2vmin;
+    top: -2vmin;
+}
+.frame:after {
+    border-radius: 20px;
+    bottom: -2.5vmin;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.25);
+    content: '';
+    left: -2.5vmin;
+    position: absolute;
+    right: -2.5vmin;
+    top: -2.5vmin;
+}
+
+.delete_button {
+    padding: 10px;
+    font-size: 20px;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    background-color: #279abd;
+    box-shadow: 0 9px #1b6c85;
+    text-decoration: none;
+}
+
+.delete_button:active {
+    background: #4ed6ff;
+    box-shadow: 0 5px #0b6783;
+    transform: translateY(4px);
 }

@@ -1,55 +1,65 @@
-//import style from './Nav.module.css'
-import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import style from './Login.module.css'
+import React, { useEffect, useState } from 'react'
 import {useHistory } from 'react-router-dom';
 import { createUser, getUser } from '../../actions';
+import { notAuthenticate } from '../../utils/Utils';
 
 export default function Login(){
-    const userStore = useSelector((state) => state.user);
     const history = useHistory();
-    const dispatch = useDispatch()
+
+    useEffect(()=>{
+        notAuthenticate(history)
+    })
 
     const [user, setUser] = useState({name:'',email:'',password:'',type:true})
-
+    const [error, setError] = useState({error:false})
+    
     function handleChange(e){
-       setUser({
-           ...user,
-           [e.target.name]:e.target.value,
-       })
+       setUser({...user,[e.target.name]:e.target.value})
     }
 
-    function handleSubmit(e){
+    function handleLogin(e){
         e.preventDefault()
-        if(user.name.length){
-            createUser(user);
-            history.push('/home');
-        }else{
-            dispatch(getUser(user))
-            if(userStore.name)console.log('ENCONTRO')//history.push('/home')
+        getUser(user).then(res =>{
+            let name = res.data
+            if(name.length){
+                console.log('sessionStorage',name)
+                sessionStorage.setItem('userName',name)
+                history.push('/home')
+            }else{
+                setError({error:true})
+            }
         }
-        
+        ).catch(err => console.log('ERROR'))
     }
     
+    function handleCreate(e){
+        e.preventDefault()
+        createUser(user);
+        setUser({...user, type:true})
+    }
+
     return(
 
         <div>{user.type ? 
             <div>
                 <h1>Log in account</h1>
-                <form onSubmit={handleSubmit}>
-                    <input onChange={(e) => handleChange(e)} type='email' name='email' placeholder='Email' required />
-                    <input onChange={(e) => handleChange(e)} type='password' name='password' placeholder='Password' required />
-                    <input type='submit' value='Login' />
+                <form onSubmit={handleLogin}>
+                    <input onChange={handleChange} type='email' name='email' placeholder='Email' value={user.email} required />
+                    <input onChange={handleChange} type='password' name='password' placeholder='Password' value={user.password} required />
+                    <input className={style.nav_button} type='submit' value='Login' />
                 </form>
-                <button onClick={() =>  setUser({...user,name:'',email:'',password:'',type:false})}>Register</button>
+                {error.error ? <div><p>User not found</p></div>:null}
+                <button className={style.nav_button} onClick={() =>  setUser({...user,name:'',email:'',password:'',type:false})}>Register</button>
             </div>
         :
             <div>
                 <h1>Create Account</h1>
-                <form  onSubmit={handleSubmit}>
-                    <input onChange={(e) => handleChange(e)} type='text' name='name' placeholder='Name' required />
-                    <input onChange={(e) => handleChange(e)} type='email' name='email' placeholder='Email' required />
-                    <input onChange={(e) => handleChange(e)} type='password' name='password' placeholder='Password' required />
-                    <input type='submit' value='Register' />
+                <form  onSubmit={handleCreate}>
+                    <input onChange={handleChange} type='text' name='name' placeholder='Name' value={user.name} required />
+                    <input onChange={handleChange} type='email' name='email' placeholder='Email' value={user.email} required />
+                    <input onChange={handleChange} type='password' name='password' placeholder='Password' value={user.password} required />
+                    <input className={style.nav_button} type='submit' value='Register' />
                 </form>
             </div>
         }</div>

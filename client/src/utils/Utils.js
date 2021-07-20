@@ -65,7 +65,7 @@ export function handleRemoveTemp(t, temperament, setTemperament, setSelected, se
     }
 }
 
-export function handleOrder(e, dispatch, getDogs) {
+export function handleOrder(e, dispatch, getSomething) {
     let orderby = e.target.value;
     let what = 'name';
     if (e.target.value === 'weight_min') {
@@ -75,7 +75,7 @@ export function handleOrder(e, dispatch, getDogs) {
         what = e.target.value;
         orderby = 'DESC';
     }
-    dispatch(getDogs('', orderby, what));
+    dispatch(getSomething('', orderby, what));
 }
 
 export function handleChangeItems(e, selected, setPag, pag) {
@@ -94,4 +94,18 @@ export function handlePages(what, items, aux, selected, setPag, pag) {
     let start = end - items;
     let page = selected.slice(start, end);
     if (page.length) setPag({...pag, pages: [...page], n: pageNumber, items, max: [...aux]});
+}
+
+export function authenticate(history) {
+    let user = sessionStorage.getItem('userName');
+    if (user === null) {
+        history.push('/home');
+    }
+}
+
+export function notAuthenticate(history) {
+    let user = sessionStorage.getItem('userName');
+    if (user !== null) {
+        history.push('/home');
+    }
 }

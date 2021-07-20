@@ -5,11 +5,14 @@ const {Op} = require('sequelize');
 router.get('/', (req, res) => {
     let {temps, orderby, what} = req.query;
     if (temps) {
-        console.log(temps);
         Dog.findAll({include: {model: Temperament, where: {name: temps}, order: [['id', 'ASC']]}})
             .then((response) => res.send(response))
             .catch((err) => console.log('error api get 1'));
     } else {
+        if (!orderby && !what) {
+            orderby = 'ASC';
+            what = 'name';
+        }
         Dog.findAll({include: {model: Temperament}, order: [[what, orderby]]})
             .then((response) => res.send(response))
             .catch((err) => console.log('error api get 3'));

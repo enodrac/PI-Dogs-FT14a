@@ -3,7 +3,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 export default function Dog({dog}){
-
     
     return(
 
@@ -12,7 +11,7 @@ export default function Dog({dog}){
             <div className='div-dog' key={dog.id}  >
 
                 <div className='div-dog-name'>
-                    <label>{dog.name}</label>
+                    <label className='dog-name'>{dog.name}</label>
                 </div>
 
                 <div className='div-dog-info'>

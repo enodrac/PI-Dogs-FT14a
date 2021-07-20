@@ -5,6 +5,7 @@ export const SET_DETAIL = 'SET_DETAIL';
 export const SET_TEMPERAMENTS = 'SET_TEMPERAMENTS';
 export const RESET_DETAIL = 'RESET_DETAIL';
 export const SET_USER = 'SET_USER';
+export const SET_FAVORITES = 'SET_FAVORITES';
 
 export function getDogs(temps, orderby, what) {
     if (temps instanceof Array) {
@@ -49,11 +50,15 @@ export function resetDetail() {
 }
 
 export function getUser({email, password}) {
+    return axios.get(`http://localhost:3001/user?email=${email}&password=${password}`);
+}
+
+export function getFavorites(name) {
     return (dispatch) => {
         axios
-            .get(`http://localhost:3001/user?email=${email}&password=${password}`)
-            .then((response) => dispatch({type: SET_USER, payload: response.data}))
-            .catch((err) => console.log('error get 3'));
+            .get(`http://localhost:3001/user/favorites?name=${name}`)
+            .then((response) => dispatch({type: SET_FAVORITES, payload: response.data}))
+            .catch((err) => console.log('error get 5'));
     };
 }
 
@@ -66,8 +71,11 @@ export function createDog(dog) {
 }
 
 export function createUser(user) {
-    console.log('ACTION', user);
     axios.post(`http://localhost:3001/user`, user);
+}
+
+export function addFavorite(breedId, name) {
+    axios.post(`http://localhost:3001/user/add`, {breedId, name});
 }
 
 //POST

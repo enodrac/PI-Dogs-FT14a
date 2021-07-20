@@ -1,6 +1,5 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const routes = require('./routes/index.js');
 const {default: axios} = require('axios');
@@ -58,7 +57,6 @@ async function fillUp() {
             }
             if (dog.temperament) {
                 var temp = dog.temperament.replace(/\s/g, '').split(',');
-
                 temp.map(async (tem) => {
                     try {
                         var temper = await Temperament.findOne({where: {name: tem}});
@@ -90,10 +88,6 @@ server.use((req, res, next) => {
 });
 
 server.use(express.urlencoded({extended: true}));
-server.use((req, res, next) => {
-    console.log('cookies-->', req.cookies);
-    next();
-});
 
 server.use('/', routes);
 

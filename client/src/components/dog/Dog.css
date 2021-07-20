@@ -39,9 +39,12 @@
 }
 
 .div-dog-name {
-    font-size: 30px;
     position: absolute;
     top: 5px;
+}
+
+.dog-name {
+    font-size: 30px;
 }
 
 .div-dog-img {
