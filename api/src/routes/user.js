@@ -1,20 +1,20 @@
 const router = require('express').Router();
 const {User, Dog, Temperament} = require('../db');
 
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
     let {email, password} = req.query;
     User.findOne({where: {email: email, password: password}, include: {model: Dog}})
         .then((response) => res.send(response.dataValues.name))
-        .catch((err) => console.log('error get user 1'));
+        .catch((err) => next(err));
 });
 
-router.get('/favorites', async (req, res) => {
+router.get('/favorites', async (req, res, next) => {
     let {name} = req.query;
     try {
         let user = await User.findOne({where: {name: name}, include: {model: Dog, include: [Temperament]}, order: [['name', 'ASC']]});
         return res.send(user.Dogs);
     } catch (err) {
-        console.log('error get favorites 1');
+        next(err);
     }
     res.send([]);
 });
@@ -23,7 +23,7 @@ router.get('/favorites', async (req, res) => {
 //////////////////////////////////////////////////////////////////////////////////
 //POST
 
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
     let {name, email, password} = req.body;
     User.create({
         name: name,
@@ -31,17 +31,17 @@ router.post('/', (req, res) => {
         password: password,
     })
         .then((response) => res.send(response))
-        .catch((err) => console.log('error post user 1'));
+        .catch((err) => next(err));
 });
 
-router.post('/add', async (req, res) => {
+router.post('/add', async (req, res, next) => {
     let {breedId, name} = req.body;
     try {
         let user = await User.findOne({where: {name: name}});
         let dog = await Dog.findOne({where: {id: breedId}});
         user.addDog(dog);
     } catch (err) {
-        console.log('error add favorite');
+        next(err);
     }
     res.send('a');
 });

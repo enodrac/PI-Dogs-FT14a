@@ -2,12 +2,12 @@ const router = require('express').Router();
 const {Dog, Temperament} = require('../db');
 const {Op} = require('sequelize');
 
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
     let {temps, orderby, what} = req.query;
     if (temps) {
         Dog.findAll({include: {model: Temperament, where: {name: temps}, order: [['id', 'ASC']]}})
             .then((response) => res.send(response))
-            .catch((err) => console.log('error api get 1'));
+            .catch((err) => next(err));
     } else {
         if (!orderby && !what) {
             orderby = 'ASC';
@@ -15,16 +15,16 @@ router.get('/', (req, res) => {
         }
         Dog.findAll({include: {model: Temperament}, order: [[what, orderby]]})
             .then((response) => res.send(response))
-            .catch((err) => console.log('error api get 3'));
+            .catch((err) => next(err));
     }
 });
 
-router.get('/:breedId', (req, res) => {
+router.get('/:breedId', (req, res, next) => {
     const {breedId} = req.params;
     if (breedId) {
         Dog.findOne({where: {id: breedId}, include: {model: Temperament}})
             .then((response) => res.send(response))
-            .catch((err) => console.log('error api get 4'));
+            .catch((err) => next(err));
     }
 });
 
