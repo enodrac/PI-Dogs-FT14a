@@ -1,0 +1,55 @@
+.div_render {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 30px;
+}
+
+.div_create {
+    background: linear-gradient(180deg, #001021 35%, #034748 100%);
+    border-radius: 20px;
+    border: white solid 2px;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+}
+
+.dog_form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    height: 500px;
+    width: 400px;
+}
+
+.dog_button_create {
+    padding: 5px 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #fff;
+    background-color: #279abd;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #1b6c85;
+    width: 100px;
+}
+
+.dog_button_create:active {
+    box-shadow: 0 5px #1b6c85;
+    transform: translateY(4px);
+}
+
+.button {
+    margin: 2px;
+    font-size: 20px;
+    color: white;
+    background: linear-gradient(0deg, #0caadc 0%, #279abd 100%);
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #0b6783;
+}
+
+.error {
+    background-color: rgba(255, 0, 0, 0.781);
+    border-radius: 30px;
+    padding: 10px;
+}

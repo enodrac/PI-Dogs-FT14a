@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import './Create.css'
+import styles from'./Create.module.css'
 import React,{ useEffect, useState} from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import { createDog, getTemperaments } from '../../actions';
@@ -12,8 +12,9 @@ const temperaments = useSelector((state) => state.temperaments);
 const dispatch = useDispatch()
 const history = useHistory()
 
-const [dog,setDog] = useState({name:'',weight_min:1,weight_max:2,height:'',life_span:'',img:'',temperaments:[]})
 const [temperament,setTemperament] = useState([])
+const [dog,setDog] = useState({name:'',weight_min:1,weight_max:2,height:'',life_span:'',img:'',temperaments:[]})
+const [error,setError] = useState({error:false,name:''})
 
 useEffect(()=>{
     authenticate(history)
@@ -52,50 +53,65 @@ function handleAddTemp(e){
     if(!temperament.includes(e.target.value) && e.target.value !== 'x')setTemperament(arr => [...arr,e.target.value])
 }
 
-function handleSubmit(e){
+async function handleSubmit(e){
     e.preventDefault()
-    createDog(dog);
+    createDog(dog)
+            .then((res) => {
+                if(res.data.name)setError({error:true,name:res.data.name})
+                else history.push('/home')
+            })
+            .catch((err) => console.log('error create dog'))
+
 }
 
     return(
-        <div className='div-dog-container'>
-            <h1>Create a new Dog</h1>
-
-            <form onSubmit={handleSubmit} className='dog-form'>
-
-                <input onChange={(e) => handleChange(e)} name="name" type="text" required placeholder='Name'/>
-
-                <label>Weight</label>
-                <input onChange={(e) => handleChange(e)} value={dog.weight_min} min="1" max={dog.weight_max-1} name="weight_min" type="number" required />
-                <input onChange={(e) => handleChange(e)} value={dog.weight_max} min={dog.weight_min+1} name="weight_max" type="number" required />
+        <div className={styles.div_render}>
+            <div className={styles.div_create}>
                 
-                <input onBlur={handleChange} name="height" type="text" required placeholder='Height'/>
-                
-                <input onBlur={handleChange} name="life_span" type="text" placeholder='Life Span'/>
+                <h1>Create a new Dog</h1>
 
-                <input onChange={(e) => handleChange(e)} name="img" type="text" placeholder='https://doge.img'/>
+                { error.name ? <h2 className={styles.error}>The dog already exist </h2>:null}
 
-                <select className="temperaments" onChange={handleAddTemp} >
-                    <option value='x'>Temperaments...</option>
-                    {temperaments.map(e => (
-                        <option key={e.id}>{e.name}</option>
-                    ))}
-                </select>
+                <form onSubmit={handleSubmit} className={styles.dog_form}>
 
-                <button className='dog-button-create' type='submit'>Create</button>
-            </form>
-            
-            
-
-            <div>
-
-                {temperament.map((t,i) => (
-                    <div key={i}>
-                        <label>{t}</label>
-                        <button onClick={e => removeTemp(t)}>x</button>
+                    <input onChange={(e) => handleChange(e)} name="name" type="text" required placeholder='Name'/>
+                    <label>Weight</label>
+                    <div>
+                        <label> min</label>
+                        <input onChange={(e) => handleChange(e)} value={dog.weight_min} min="1" max={dog.weight_max-1} name="weight_min" type="number" required />
+                        <label> max</label>
+                        <input onChange={(e) => handleChange(e)} value={dog.weight_max} min={dog.weight_min+1} name="weight_max" type="number" required />
                     </div>
-                ))}
-            </div>
+
+                    
+                    <input onBlur={handleChange} name="height" type="text" required placeholder='Height'/>
+                    
+                    <input onBlur={handleChange} name="life_span" type="text" placeholder='Life Span'/>
+
+                    <input onBlur={handleChange} name="img" type="text" placeholder='https://doge.img'/>
+
+                    <select className="temperaments" onChange={handleAddTemp} >
+                        <option value='x'>Temperaments...</option>
+                        {temperaments.map(e => (
+                            <option key={e.id}>{e.name}</option>
+                        ))}
+                    </select>
+
+                    <button className={styles.dog_button_create} type='submit'>Create</button>
+                </form>
+                
+                
+
+                <div>
+
+                    {temperament.map((t,i) => (
+                        <div key={i}>
+                            <label>{t}</label>
+                            <button className={styles.button} onClick={e => removeTemp(t)}>x</button>
+                        </div>
+                    ))}
+                </div>
+            </div> 
         </div>
     )
 }

@@ -15,9 +15,9 @@ export function pageCount(items, selected) {
     return aux;
 }
 
-export function handleSearch(e, dogsStore, setSelected) {
+export function handleSearch(e, dogsStore, selected, setSelected) {
     if (e.target.value.length) {
-        setSelected([...dogsStore.filter((dog) => dog.name.toLowerCase().includes(e.target.value.toLowerCase()))]);
+        setSelected([...selected.filter((dog) => dog.name.toLowerCase().includes(e.target.value.toLowerCase()))]);
     } else {
         setSelected([...dogsStore]);
     }

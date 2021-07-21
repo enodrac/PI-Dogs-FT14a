@@ -40,7 +40,7 @@ export default function Home() {
 
             <h1>Home</h1>
             
-            <div className='div-inputs'>
+            <div className={styles.div_inputs}>
 
                 <div >
                     <input onChange={(e) => handleSearch(e,favoritesStore,setSelected) } type="text" placeholder='Breed' />
@@ -56,7 +56,7 @@ export default function Home() {
                     {temperament.map((t, i) => (
                         <div key={i}>
                             <label>{t}</label>
-                            <button className='index' onClick={e => handleRemoveTemp(t, temperament, setTemperament, setSelected, selected,favoritesStore)}>x</button>
+                            <button className={styles.index} onClick={e => handleRemoveTemp(t, temperament, setTemperament, setSelected, selected,favoritesStore)}>x</button>
                         </div>
                     ))} 
                 </div>
@@ -89,20 +89,20 @@ export default function Home() {
 
             </div>
 
-            <div className='div-dogs-buttons'>
+            <div className={styles.div_dogs_buttons}>
 
-                <button className='prev' onClick={() => handlePages('-', pag.items, pag.max, selected, setPag, pag)}>prev</button>
+                <button className={styles.prev} onClick={() => handlePages('-', pag.items, pag.max, selected, setPag, pag)}>prev</button>
                     {pag.max.map((e,i) => {
-                        if(i > pag.n - 6 && i < pag.n + 6){ 
+                        if(i > pag.n - 5 && i < pag.n + 5){ 
                             let className = e === pag.n ? 'click-index' : 'index'
-                            return <button className={className} key={e} onClick={() => handlePages(e, pag.items, pag.max, selected, setPag, pag)}>{e}</button>
+                            return <button className={styles[className]} key={e} onClick={() => handlePages(e, pag.items, pag.max, selected, setPag, pag)}>{e}</button>
                         }
                     })}
-                <button className='next' onClick={() => handlePages('+', pag.items, pag.max, selected, setPag, pag)}>next</button>
+                <button className={styles.next} onClick={() => handlePages('+', pag.items, pag.max, selected, setPag, pag)}>next</button>
 
             </div>
                     {console.log(pag.pages[0])}
-            <div className='div-dogs-container'>
+            <div className={styles.div_dogs_container}>
                 {pag.pages.length ?
                     pag.pages.map((d) => (
                         <div key={d.id}>
@@ -110,7 +110,7 @@ export default function Home() {
                         </div>
                     ))
 
-                    : <h3>that dog doesn't exist</h3>}
+                    : <h3 className={styles.error}>that dog doesn't exist</h3>}
 
             </div>
 

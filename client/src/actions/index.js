@@ -13,14 +13,14 @@ export function getDogs(temps, orderby, what) {
             axios
                 .get(`http://localhost:3001/dogs?temps=${temps}`)
                 .then((response) => dispatch({type: SET_DOGS, payload: response.data}))
-                .catch((err) => console.log('error get 1'));
+                .catch((err) => console.log('error get 1', err));
         };
     } else {
         return (dispatch) => {
             axios
                 .get(`http://localhost:3001/dogs?orderby=${orderby}&what=${what}`)
                 .then((response) => dispatch({type: SET_DOGS, payload: response.data}))
-                .catch((err) => console.log('error get 2'));
+                .catch((err) => console.log('error get 2', err));
         };
     }
 }
@@ -30,7 +30,7 @@ export function getDetail(breedId) {
         axios
             .get(`http://localhost:3001/dogs/${breedId}`)
             .then((response) => dispatch({type: SET_DETAIL, payload: response.data}))
-            .catch((err) => console.log('error get 3'));
+            .catch((err) => console.log('error get 3', err));
     };
 }
 
@@ -39,7 +39,7 @@ export function getTemperaments() {
         axios
             .get(`http://localhost:3001/temperament`)
             .then((response) => dispatch({type: SET_TEMPERAMENTS, payload: response.data}))
-            .catch((err) => console.log('error get 4'));
+            .catch((err) => console.log('error get 4', err));
     };
 }
 
@@ -49,7 +49,7 @@ export function resetDetail() {
     };
 }
 
-export function getUser({email, password}) {
+export async function getUser({email, password}) {
     return axios.get(`http://localhost:3001/user?email=${email}&password=${password}`);
 }
 
@@ -58,7 +58,7 @@ export function getFavorites(name) {
         axios
             .get(`http://localhost:3001/user/favorites?name=${name}`)
             .then((response) => dispatch({type: SET_FAVORITES, payload: response.data}))
-            .catch((err) => console.log('error get 5'));
+            .catch((err) => console.log('error get 5', err));
     };
 }
 
@@ -66,12 +66,12 @@ export function getFavorites(name) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 //POST
 
-export function createDog(dog) {
-    axios.post(`http://localhost:3001/dogs`, dog);
+export async function createDog(dog) {
+    return axios.post(`http://localhost:3001/dogs`, dog);
 }
 
-export function createUser(user) {
-    axios.post(`http://localhost:3001/user`, user);
+export async function createUser(user) {
+    return axios.post(`http://localhost:3001/user`, user);
 }
 
 export function addFavorite(breedId, name) {

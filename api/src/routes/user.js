@@ -4,7 +4,7 @@ const {User, Dog, Temperament} = require('../db');
 router.get('/', (req, res, next) => {
     let {email, password} = req.query;
     User.findOne({where: {email: email, password: password}, include: {model: Dog}})
-        .then((response) => res.send(response.dataValues.name))
+        .then((response) => res.send(response))
         .catch((err) => next(err));
 });
 
@@ -16,22 +16,21 @@ router.get('/favorites', async (req, res, next) => {
     } catch (err) {
         next(err);
     }
-    res.send([]);
 });
 
 //GET
 //////////////////////////////////////////////////////////////////////////////////
 //POST
 
-router.post('/', (req, res, next) => {
+router.post('/', async (req, res, next) => {
     let {name, email, password} = req.body;
-    User.create({
-        name: name,
-        email: email,
-        password: password,
-    })
-        .then((response) => res.send(response))
-        .catch((err) => next(err));
+    try {
+        let [user, created] = await User.findOrCreate({where: {name: name}, defaults: {email: email, password: password}});
+        if (!created) return res.send(user);
+        return res.send({});
+    } catch (err) {
+        next(err);
+    }
 });
 
 router.post('/add', async (req, res, next) => {
@@ -43,7 +42,6 @@ router.post('/add', async (req, res, next) => {
     } catch (err) {
         next(err);
     }
-    res.send('a');
 });
 
 module.exports = router;

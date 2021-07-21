@@ -1,4 +1,4 @@
-.div-dog {
+.div_dog {
     /* background: linear-gradient(180deg, #1481ba 0%, #11b5e4 100%); */
     background-color: #1481ba;
     background-image: radial-gradient(#11b5e4 45%, transparent 55%), radial-gradient(#11b5e4 15%, transparent 25%);
@@ -19,47 +19,47 @@
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
 }
 
-.div-dog-info {
+.div_dog_info {
     display: flex;
     flex-direction: row;
     align-items: center;
     margin-top: 35px;
 }
 
-.div-dog-temperaments {
+.div_dog_temperaments {
     max-height: 400px;
     overflow-y: auto;
     overflow-x: hidden;
     flex: 1;
 }
 
-.div-dog:hover {
+.div_dog:hover {
     margin-top: 1px;
     border: solid greenyellow 3px;
 }
 
-.div-dog-name {
+.div_dog_name {
     position: absolute;
     top: 5px;
 }
 
-.dog-name {
+.dog_name {
     font-size: 30px;
 }
 
-.div-dog-img {
+.div_dog_img {
     width: 350px;
     height: 350px;
     margin-bottom: 35px;
     padding: 15px;
 }
 
-.link-dog {
+.link_dog {
     color: white;
     text-decoration: none;
 }
 
-.dog-img {
+.dog_img {
     width: 350px;
     height: 350px;
     object-fit: cover;

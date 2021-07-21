@@ -2,7 +2,7 @@ import styles from './Detail.module.css'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { deleteDog, getDetail, getDogs, addFavorite} from '../../actions';
+import { deleteDog, getDetail, addFavorite, resetDetail} from '../../actions';
 
 
 function Detail() {
@@ -11,7 +11,8 @@ function Detail() {
 
     useEffect(()=>{
         dispatch(getDetail(parseInt(window.location.href.split(':').pop())))
-     },[dispatch])
+        return () => {dispatch(resetDetail())}
+    },[dispatch])
 
     function handleAdd(){
         addFavorite(detailStore.id,sessionStorage.getItem('userName'))
@@ -34,7 +35,7 @@ function Detail() {
 
                              <div className={styles.div_delFav}>
                                 <Link to={'/home'}>
-                                    <button className={styles.delete_button} onClick={() => {deleteDog(detailStore.id); dispatch(getDogs('', 'ASC', 'name'))}}>Delete</button>
+                                    <button className={styles.delete_button} onClick={() => deleteDog(detailStore.id)}>Delete</button>
                                 </Link>
 
                                 <div>{sessionStorage.getItem('userName') !== null ?

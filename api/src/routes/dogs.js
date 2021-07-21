@@ -32,32 +32,36 @@ router.get('/:breedId', (req, res, next) => {
 //////////////////////////////////////////////////////////////////////////////////
 //POST
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
     const {name, weight_min, weight_max, height, life_span, temperaments, img} = req.body;
     try {
-        var newDog = await Dog.create({
-            name: name,
-            weight_min: weight_min,
-            weight_max: weight_max,
-            height: height,
-            life_span: life_span,
-            img: img,
-            created: 'true',
+        let [newDog, find] = await Dog.findOrCreate({
+            where: {name: name},
+            defaults: {
+                weight_min: weight_min,
+                weight_max: weight_max,
+                height: height,
+                life_span: life_span,
+                img: img,
+                created: 'true',
+            },
         });
+
+        if (!find) return res.send(newDog);
 
         if (temperaments.length) {
             temperaments.map(async (tem) => {
                 try {
-                    var temper = await Temperament.findOne({where: {name: tem}});
+                    let temper = await Temperament.findOne({where: {name: tem}});
                     newDog.addTemperament(temper);
                 } catch (err) {
-                    console.log('error api post 1');
+                    next(err);
                 }
             });
         }
-        res.send(newDog);
+        res.send({});
     } catch (err) {
-        console.log('error api post 2');
+        next(err);
     }
 });
 
@@ -71,13 +75,13 @@ router.put('/:breedId', (req, res) => {});
 //////////////////////////////////////////////////////////////////////////////////
 //DELETE
 
-router.delete('/:breedId', (req, res) => {
+router.delete('/:breedId', (req, res, next) => {
     const {breedId} = req.params;
     try {
         Dog.destroy({where: {id: breedId}});
         res.sendStatus(200);
     } catch (err) {
-        console.log('error api delete 1');
+        next(err);
     }
 });
 

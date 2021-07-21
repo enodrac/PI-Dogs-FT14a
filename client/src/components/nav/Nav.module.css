@@ -1,27 +1,15 @@
 .nav_render_div {
     display: flex;
-    flex-direction: row-reverse;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
-    position: absolute;
+    background: linear-gradient(180deg, #001021 35%, #034748 100%);
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
     padding: 15px;
-    right: 30px;
-    width: 350px;
-}
-
-.username {
-    padding: 10px;
-    font-size: 20px;
-    color: #fff;
-    border: none;
-    border-radius: 20px;
-    background-color: #279abd;
-    box-shadow: 0 9px #1b6c85;
-    text-decoration: none;
 }
 
 .nav_button {
     padding: 10px;
+    margin-left: 50px;
     font-size: 20px;
     color: #fff;
     border: none;
