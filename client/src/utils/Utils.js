@@ -15,15 +15,17 @@ export function pageCount(items, selected) {
     return aux;
 }
 
-export function handleSearch(e, dogsStore, selected, dispatch) {
+export function handleSearch(e, dogsStore, selected, dispatch, pag) {
     if (e.target.value.length) {
         dispatch({type: 'SET_SELECTED', payload: selected.filter((dog) => dog.name.toLowerCase().includes(e.target.value.toLowerCase()))});
+        dispatch({type: 'SET_PAG', payload: {...pag, c: 2, render: true}});
     } else {
         dispatch({type: 'SET_SELECTED', payload: dogsStore});
+        dispatch({type: 'SET_PAG', payload: {...pag, c: 2, render: true}});
     }
 }
 
-export function handleAddTemp(e, temperament, dispatch, selected) {
+export function handleAddTemp(e, temperament, dispatch, selected, pag) {
     if (!temperament.includes(e.target.value) && e.target.value !== 'x') {
         let aux = temperament;
         aux.push(e.target.value);
@@ -35,11 +37,12 @@ export function handleAddTemp(e, temperament, dispatch, selected) {
                     if (temperament.every((e) => aux.includes(e))) return dog;
                 }),
             });
+            dispatch({type: 'SET_PAG', payload: {...pag, c: 2, render: true}});
         }
     }
 }
 
-export function handleRemoveTemp(t, temperament, setTemperament, dispatch, dogsStore) {
+export function handleRemoveTemp(t, temperament, setTemperament, dispatch, dogsStore, pag) {
     let aux = temperament;
     let index = aux.indexOf(t);
     aux.splice(index, 1);
@@ -52,8 +55,10 @@ export function handleRemoveTemp(t, temperament, setTemperament, dispatch, dogsS
                 if (temperament.every((e) => aux.includes(e))) return dog;
             }),
         });
+        dispatch({type: 'SET_PAG', payload: {...pag, c: 2, render: true}});
     } else {
         dispatch({type: 'SET_SELECTED', payload: dogsStore});
+        dispatch({type: 'SET_PAG', payload: {...pag, c: 2, render: true}});
     }
 }
 
@@ -70,17 +75,19 @@ export function handleSelected(e, dogsStore, dispatch, pag) {
 }
 
 export function handleOrder(e, dispatch, getSomething, pag) {
-    let how = e.target.value;
-    let what = 'name';
-    if (e.target.value === 'weight_min') {
-        what = e.target.value;
-        how = 'ASC';
-    } else if (e.target.value === 'weight_max') {
-        what = e.target.value;
-        how = 'DESC';
+    if (e.target.value !== 'x') {
+        let how = e.target.value;
+        let what = 'name';
+        if (e.target.value === 'weight_min') {
+            what = e.target.value;
+            how = 'ASC';
+        } else if (e.target.value === 'weight_max') {
+            what = e.target.value;
+            how = 'DESC';
+        }
+        dispatch(getSomething('', how, what));
+        dispatch({type: 'SET_PAG', payload: {...pag, c: 2, render: true}});
     }
-    dispatch(getSomething('', how, what));
-    dispatch({type: 'SET_PAG', payload: {...pag, c: 2, render: true}});
 }
 
 export function handleChangeItems(e, selected, dispatch, pag) {

@@ -11,30 +11,31 @@ import Dog from '../dog/Dog'
 export default function Home() {
     
     const dogsStore = useSelector((state) => state.dogs);
-    const temperaments = useSelector((state) => state.temperaments);
-    const selected = useSelector((state) => state.selected);
+    const temperamentsStore = useSelector((state) => state.temperaments);
+    const selectedStore = useSelector((state) => state.selected);
     const pag = useSelector((state) => state.pag);
     const dispatch = useDispatch()
 
     const [temperament, setTemperament] = useState([])
-
+    
     useEffect(() => {
         if(pag.render)dispatch(getDogs('', 'ASC', 'name'))
         dispatch(getTemperaments())
     }, [dispatch])
-
+    
     useEffect(() => {
-        if(pag.render)dispatch({type:'SET_SELECTED',payload:dogsStore})
+        if(pag.render)dispatch({type:'SET_SELECTED',payload:dogsStore}) 
     }, [dogsStore])
-
+    
     useEffect(() => {
         if(pag.render){
-            let aux = pageCount(pag.items,selected)
-            dispatch({type:'SET_PAG',payload:{...pag, pages: [...selected.slice(0, 9)],max:aux, n: 1,c:pag.c+1}}) 
+            let aux = pageCount(pag.items,selectedStore)
+            dispatch({type:'SET_PAG',payload:{...pag, pages: [...selectedStore.slice(0, 9)],max:aux, n: 1,c:pag.c+1}}) 
         }
         if(pag.c > 2){
-            dispatch({type:'SET_PAG',payload:{...pag, render:false}}) }
-    }, [selected])
+            dispatch({type:'SET_PAG',payload:{...pag, render:false}}) 
+        }
+    }, [selectedStore])
 
     return (
         <div className={styles.render_div}>
@@ -46,11 +47,11 @@ export default function Home() {
                         <Link className={styles.home_link} to={'/create'} >Create Dogs</Link>:null
                     }
 
-                    <input onChange={(e) => handleSearch(e, dogsStore, selected, dispatch) } type="text" placeholder='Breed' />
+                    <input onChange={(e) => handleSearch(e, dogsStore, selectedStore, dispatch,pag) } type="text" placeholder='Breed' />
                     
-                    <select onChange={(e)=> handleAddTemp(e,temperament,dispatch, selected)} >
+                    <select onChange={(e)=> handleAddTemp(e,temperament,dispatch, selectedStore,pag)} >
                         <option value='x'>Temperaments...</option>
-                        {temperaments.map((e) => (
+                        {temperamentsStore.map((e) => (
                             <option key={e.id}>{e.name}</option>
                         ))}
                     </select>
@@ -62,7 +63,7 @@ export default function Home() {
                     {temperament.map((t, i) => (
                         <div key={i}>
                             <label>{t}</label>
-                            <button className={styles.index} onClick={e => handleRemoveTemp(t, temperament, setTemperament, dispatch,dogsStore)}>x</button>
+                            <button className={styles.index} onClick={e => handleRemoveTemp(t, temperament, setTemperament, dispatch,dogsStore,pag)}>x</button>
                         </div>
                     ))} 
 
@@ -86,29 +87,29 @@ export default function Home() {
                     <option value='true'>Created</option>
                 </select>
 
-                <select onChange={(e) => handleChangeItems(e, selected, dispatch, pag)} value={pag.items}>
+                <select onChange={(e) => handleChangeItems(e, selectedStore, dispatch, pag)} value={pag.items}>
                     <option value={3}>3</option>
                     <option value={6}>6</option>
                     <option value={9} >9</option>
                     <option value={27}>27</option>
                     <option value={54}>54</option>
-                    <option value={selected.length}>All</option>
+                    <option value={selectedStore.length}>All</option>
                 </select>
 
             </div>
 
             <div className={styles.div_dogs_buttons}>
 
-                <button className={styles.prev} onClick={() => handlePages('-', pag.items, pag.max, selected, dispatch, pag)}>prev</button>
+                <button className={styles.prev} onClick={() => handlePages('-', pag.items, pag.max, selectedStore, dispatch, pag)}>prev</button>
 
                     {pag.max.map((e,i) => {
                         if(i > pag.n - 5 && i < pag.n + 5){ 
                             let className = e === pag.n ? 'click-index' : 'index'
-                            return <button className={styles[className]} key={e} onClick={() => handlePages(e, pag.items, pag.max, selected, dispatch, pag)}>{e}</button>
+                            return <button className={styles[className]} key={e} onClick={() => handlePages(e, pag.items, pag.max, selectedStore, dispatch, pag)}>{e}</button>
                         }
                     })}
                 
-                <button className={styles.next} onClick={() => handlePages('+', pag.items, pag.max, selected, dispatch, pag)}>next</button>
+                <button className={styles.next} onClick={() => handlePages('+', pag.items, pag.max, selectedStore, dispatch, pag)}>next</button>
 
             </div>
 
