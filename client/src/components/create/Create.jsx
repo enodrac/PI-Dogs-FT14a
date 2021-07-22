@@ -9,6 +9,7 @@ import { useHistory } from 'react-router-dom';
 export default function Create(){
     
 const temperaments = useSelector((state) => state.temperaments);
+const pag = useSelector((state) => state.pag);
 const dispatch = useDispatch()
 const history = useHistory()
 
@@ -58,7 +59,10 @@ async function handleSubmit(e){
     createDog(dog)
             .then((res) => {
                 if(res.data.name)setError({error:true,name:res.data.name})
-                else history.push('/home')
+                else {
+                    dispatch({type:'SET_PAG',payload:{...pag,c:0, render:true}})
+                    history.push('/home')
+                }
             })
             .catch((err) => console.log('error create dog'))
 

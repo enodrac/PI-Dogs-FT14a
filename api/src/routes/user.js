@@ -9,7 +9,7 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/favorites', async (req, res, next) => {
-    let {name} = req.query;
+    let {name, how, what} = req.query;
     try {
         let user = await User.findOne({where: {name: name}, include: {model: Dog, include: [Temperament]}, order: [['name', 'ASC']]});
         return res.send(user.Dogs);

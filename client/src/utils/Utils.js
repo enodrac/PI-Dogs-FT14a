@@ -15,75 +15,80 @@ export function pageCount(items, selected) {
     return aux;
 }
 
-export function handleSearch(e, dogsStore, selected, setSelected) {
+export function handleSearch(e, dogsStore, selected, dispatch) {
     if (e.target.value.length) {
-        setSelected([...selected.filter((dog) => dog.name.toLowerCase().includes(e.target.value.toLowerCase()))]);
+        dispatch({type: 'SET_SELECTED', payload: selected.filter((dog) => dog.name.toLowerCase().includes(e.target.value.toLowerCase()))});
     } else {
-        setSelected([...dogsStore]);
+        dispatch({type: 'SET_SELECTED', payload: dogsStore});
     }
 }
 
-export function handleSelected(e, dogsStore, setSelected) {
-    let aux;
-    if (e.target.value !== 'All') {
-        aux = dogsStore.filter((d) => d.created === e.target.value);
-        setSelected([...aux]);
-    } else {
-        setSelected([...dogsStore]);
-    }
-}
-
-export function handleAddTemp(e, temperament, setSelected, selected) {
+export function handleAddTemp(e, temperament, dispatch, selected) {
     if (!temperament.includes(e.target.value) && e.target.value !== 'x') {
         let aux = temperament;
         aux.push(e.target.value);
         if (temperament.length) {
-            setSelected(
-                selected.filter((dog) => {
+            dispatch({
+                type: 'SET_SELECTED',
+                payload: selected.filter((dog) => {
                     let aux = dog.Temperaments.map((temp) => temp.name);
                     if (temperament.every((e) => aux.includes(e))) return dog;
-                })
-            );
+                }),
+            });
         }
     }
 }
 
-export function handleRemoveTemp(t, temperament, setTemperament, setSelected, selected, dogsStore) {
+export function handleRemoveTemp(t, temperament, setTemperament, dispatch, dogsStore) {
     let aux = temperament;
     let index = aux.indexOf(t);
     aux.splice(index, 1);
     setTemperament([...aux]);
     if (temperament.length) {
-        setSelected(
-            dogsStore.filter((dog) => {
+        dispatch({
+            type: 'SET_SELECTED',
+            payload: dogsStore.filter((dog) => {
                 let aux = dog.Temperaments.map((temp) => temp.name);
                 if (temperament.every((e) => aux.includes(e))) return dog;
-            })
-        );
+            }),
+        });
     } else {
-        setSelected(dogsStore);
+        dispatch({type: 'SET_SELECTED', payload: dogsStore});
     }
 }
 
-export function handleOrder(e, dispatch, getSomething) {
-    let orderby = e.target.value;
+export function handleSelected(e, dogsStore, dispatch, pag) {
+    let aux;
+    if (e.target.value !== 'All') {
+        aux = dogsStore.filter((d) => d.created === e.target.value);
+        dispatch({type: 'SET_SELECTED', payload: aux});
+        dispatch({type: 'SET_PAG', payload: {...pag, c: 2, render: true}});
+    } else {
+        dispatch({type: 'SET_SELECTED', payload: dogsStore});
+        dispatch({type: 'SET_PAG', payload: {...pag, c: 2, render: true}});
+    }
+}
+
+export function handleOrder(e, dispatch, getSomething, pag) {
+    let how = e.target.value;
     let what = 'name';
     if (e.target.value === 'weight_min') {
         what = e.target.value;
-        orderby = 'ASC';
+        how = 'ASC';
     } else if (e.target.value === 'weight_max') {
         what = e.target.value;
-        orderby = 'DESC';
+        how = 'DESC';
     }
-    dispatch(getSomething('', orderby, what));
+    dispatch(getSomething('', how, what));
+    dispatch({type: 'SET_PAG', payload: {...pag, c: 2, render: true}});
 }
 
-export function handleChangeItems(e, selected, setPag, pag) {
+export function handleChangeItems(e, selected, dispatch, pag) {
     let aux = pageCount(parseInt(e.target.value), selected);
-    handlePages(1, parseInt(e.target.value), aux, selected, setPag, pag);
+    handlePages(1, parseInt(e.target.value), aux, selected, dispatch, pag);
 }
 
-export function handlePages(what, items, aux, selected, setPag, pag) {
+export function handlePages(what, items, aux, selected, dispatch, pag) {
     let pageNumber;
     if (what === '-') pageNumber = pag.n - 1;
     else if (what === '+') pageNumber = pag.n + 1;
@@ -93,7 +98,7 @@ export function handlePages(what, items, aux, selected, setPag, pag) {
     let end = items * pageNumber;
     let start = end - items;
     let page = selected.slice(start, end);
-    if (page.length) setPag({...pag, pages: [...page], n: pageNumber, items, max: [...aux]});
+    if (page.length) dispatch({type: 'SET_PAG', payload: {...pag, pages: [...page], n: pageNumber, items, max: [...aux]}});
 }
 
 export function authenticate(history) {

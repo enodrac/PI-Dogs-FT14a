@@ -4,10 +4,15 @@ export const SET_DOGS = 'SET_DOGS';
 export const SET_DETAIL = 'SET_DETAIL';
 export const SET_TEMPERAMENTS = 'SET_TEMPERAMENTS';
 export const RESET_DETAIL = 'RESET_DETAIL';
-export const SET_USER = 'SET_USER';
 export const SET_FAVORITES = 'SET_FAVORITES';
 
-export function getDogs(temps, orderby, what) {
+export function trick(dispatch, pag) {
+    setTimeout(() => {
+        dispatch({type: 'SET_PAG', payload: {...pag, c: 2, render: true}});
+    }, 10);
+}
+
+export function getDogs(temps, how, what) {
     if (temps instanceof Array) {
         return (dispatch) => {
             axios
@@ -18,7 +23,7 @@ export function getDogs(temps, orderby, what) {
     } else {
         return (dispatch) => {
             axios
-                .get(`http://localhost:3001/dogs?orderby=${orderby}&what=${what}`)
+                .get(`http://localhost:3001/dogs?how=${how}&what=${what}`)
                 .then((response) => dispatch({type: SET_DOGS, payload: response.data}))
                 .catch((err) => console.log('error get 2', err));
         };

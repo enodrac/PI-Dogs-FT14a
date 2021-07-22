@@ -3,17 +3,17 @@ const {Dog, Temperament} = require('../db');
 const {Op} = require('sequelize');
 
 router.get('/', (req, res, next) => {
-    let {temps, orderby, what} = req.query;
+    let {temps, how, what} = req.query;
     if (temps) {
         Dog.findAll({include: {model: Temperament, where: {name: temps}, order: [['id', 'ASC']]}})
             .then((response) => res.send(response))
             .catch((err) => next(err));
     } else {
-        if (!orderby && !what) {
-            orderby = 'ASC';
+        if (!how && !what) {
+            how = 'ASC';
             what = 'name';
         }
-        Dog.findAll({include: {model: Temperament}, order: [[what, orderby]]})
+        Dog.findAll({include: {model: Temperament}, order: [[what, how]]})
             .then((response) => res.send(response))
             .catch((err) => next(err));
     }

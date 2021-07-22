@@ -1,18 +1,28 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import styles from './Detail.module.css'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { deleteDog, getDetail, addFavorite, resetDetail} from '../../actions';
 
 
 function Detail() {
+    const pag = useSelector((state) => state.pag);
     const detailStore = useSelector((state) => state.detail);
     const dispatch = useDispatch()
+    const history = useHistory()
 
     useEffect(()=>{
         dispatch(getDetail(parseInt(window.location.href.split(':').pop())))
-        return () => {dispatch(resetDetail())}
+         return () => {dispatch(resetDetail())}
     },[dispatch])
+
+    function handleDelete(){
+        deleteDog(detailStore.id)
+        dispatch({type:'SET_PAG',payload:{...pag,c:0, render:true}})
+        dispatch(resetDetail())
+        history.push('/home')
+    }
 
     function handleAdd(){
         addFavorite(detailStore.id,sessionStorage.getItem('userName'))
@@ -34,9 +44,12 @@ function Detail() {
                              <h1>Dog detail</h1>
 
                              <div className={styles.div_delFav}>
-                                <Link to={'/home'}>
+
+                                {/* <Link to={'/home'}>
                                     <button className={styles.delete_button} onClick={() => deleteDog(detailStore.id)}>Delete</button>
-                                </Link>
+                                </Link> */}
+
+                                    <button className={styles.delete_button} onClick={() => handleDelete()}>Delete</button>
 
                                 <div>{sessionStorage.getItem('userName') !== null ?
                                     <button className={styles.delete_button} onClick={() => handleAdd()}>

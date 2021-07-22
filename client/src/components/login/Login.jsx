@@ -4,9 +4,12 @@ import React, { useEffect, useState } from 'react'
 import {useHistory } from 'react-router-dom';
 import { createUser, getUser } from '../../actions';
 import { notAuthenticate } from '../../utils/Utils';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function Login(){
     const history = useHistory();
+    const dispatch = useDispatch()
+    const pag = useSelector((state) => state.pag);
     
     const [user, setUser] = useState({name:'',email:'',password:'',type:true,found: false})
     const [error, setError] = useState({error:false})
@@ -25,6 +28,7 @@ export default function Login(){
             let name = res.data.name
             if(name){
                 sessionStorage.setItem('userName',name)
+                dispatch({type:'SET_PAG',payload:{...pag,c:0, render:true}})
                 history.push('/home')
             }else{
                 setError({error:true})

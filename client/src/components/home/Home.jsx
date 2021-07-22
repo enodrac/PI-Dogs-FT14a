@@ -9,27 +9,31 @@ import {pageCount,handleSearch,handleAddTemp,handleSelected,handleRemoveTemp,han
 import Dog from '../dog/Dog'
 
 export default function Home() {
-
+    
     const dogsStore = useSelector((state) => state.dogs);
     const temperaments = useSelector((state) => state.temperaments);
+    const selected = useSelector((state) => state.selected);
+    const pag = useSelector((state) => state.pag);
     const dispatch = useDispatch()
 
-    const [selected, setSelected] = useState([])
     const [temperament, setTemperament] = useState([])
-    const [pag, setPag] = useState({ pages: [], n: 1, max: [], items:9})
 
     useEffect(() => {
-        dispatch(getDogs('', 'ASC', 'name'))
+        if(pag.render)dispatch(getDogs('', 'ASC', 'name'))
         dispatch(getTemperaments())
     }, [dispatch])
 
     useEffect(() => {
-        setSelected([...dogsStore])
+        if(pag.render)dispatch({type:'SET_SELECTED',payload:dogsStore})
     }, [dogsStore])
 
     useEffect(() => {
-        let aux = pageCount(pag.items,selected)
-        setPag({...pag, pages: [...selected.slice(0, 9)],max:aux, n: 1}) 
+        if(pag.render){
+            let aux = pageCount(pag.items,selected)
+            dispatch({type:'SET_PAG',payload:{...pag, pages: [...selected.slice(0, 9)],max:aux, n: 1,c:pag.c+1}}) 
+        }
+        if(pag.c > 2){
+            dispatch({type:'SET_PAG',payload:{...pag, render:false}}) }
     }, [selected])
 
     return (
@@ -42,9 +46,9 @@ export default function Home() {
                         <Link className={styles.home_link} to={'/create'} >Create Dogs</Link>:null
                     }
 
-                    <input onChange={(e) => handleSearch(e, dogsStore, selected, setSelected) } type="text" placeholder='Breed' />
+                    <input onChange={(e) => handleSearch(e, dogsStore, selected, dispatch) } type="text" placeholder='Breed' />
                     
-                    <select onChange={(e)=> handleAddTemp(e,temperament,setSelected, selected)} >
+                    <select onChange={(e)=> handleAddTemp(e,temperament,dispatch, selected)} >
                         <option value='x'>Temperaments...</option>
                         {temperaments.map((e) => (
                             <option key={e.id}>{e.name}</option>
@@ -58,7 +62,7 @@ export default function Home() {
                     {temperament.map((t, i) => (
                         <div key={i}>
                             <label>{t}</label>
-                            <button className={styles.index} onClick={e => handleRemoveTemp(t, temperament, setTemperament, setSelected, selected,dogsStore)}>x</button>
+                            <button className={styles.index} onClick={e => handleRemoveTemp(t, temperament, setTemperament, dispatch,dogsStore)}>x</button>
                         </div>
                     ))} 
 
@@ -68,20 +72,21 @@ export default function Home() {
             
             <div>
 
-                <select onChange={(e) => handleSelected(e, dogsStore, setSelected)}>
-                    <option value="All">All</option>
-                    <option value='false'>Real</option>
-                    <option value='true'>Created</option>
-                </select>
-
-                <select onChange={(e) => handleOrder(e, dispatch, getDogs,pag,setPag)} >
+                <select onChange={(e) => handleOrder(e, dispatch, getDogs,pag)} >
+                    <option value="x">Order...</option>
                     <option value='ASC'>A-Z</option>
                     <option value='DESC'>Z-A</option>
                     <option value='weight_min'>Weight min</option>
                     <option value='weight_max'>Weight max</option>
                 </select>
 
-                <select onChange={(e) => handleChangeItems(e, selected, setPag, pag)} value={pag.items}>
+                <select onChange={(e) => handleSelected(e, dogsStore, dispatch,pag)}>
+                    <option value="All">All</option>
+                    <option value='false'>Real</option>
+                    <option value='true'>Created</option>
+                </select>
+
+                <select onChange={(e) => handleChangeItems(e, selected, dispatch, pag)} value={pag.items}>
                     <option value={3}>3</option>
                     <option value={6}>6</option>
                     <option value={9} >9</option>
@@ -94,16 +99,16 @@ export default function Home() {
 
             <div className={styles.div_dogs_buttons}>
 
-                <button className={styles.prev} onClick={() => handlePages('-', pag.items, pag.max, selected, setPag, pag)}>prev</button>
+                <button className={styles.prev} onClick={() => handlePages('-', pag.items, pag.max, selected, dispatch, pag)}>prev</button>
 
                     {pag.max.map((e,i) => {
                         if(i > pag.n - 5 && i < pag.n + 5){ 
                             let className = e === pag.n ? 'click-index' : 'index'
-                            return <button className={styles[className]} key={e} onClick={() => handlePages(e, pag.items, pag.max, selected, setPag, pag)}>{e}</button>
+                            return <button className={styles[className]} key={e} onClick={() => handlePages(e, pag.items, pag.max, selected, dispatch, pag)}>{e}</button>
                         }
                     })}
                 
-                <button className={styles.next} onClick={() => handlePages('+', pag.items, pag.max, selected, setPag, pag)}>next</button>
+                <button className={styles.next} onClick={() => handlePages('+', pag.items, pag.max, selected, dispatch, pag)}>next</button>
 
             </div>
 
