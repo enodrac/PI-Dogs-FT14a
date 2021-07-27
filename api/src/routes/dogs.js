@@ -1,6 +1,6 @@
 const router = require('express').Router();
+const {default: axios} = require('axios');
 const {Dog, Temperament} = require('../db');
-const {Op} = require('sequelize');
 
 router.get('/', (req, res, next) => {
     let {temps, how, what} = req.query;
