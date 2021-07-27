@@ -19,7 +19,8 @@ export default function Home() {
     const [temperament, setTemperament] = useState([])
     
     useEffect(() => {
-        if(pag.render)dispatch(getDogs('', 'ASC', 'name'))
+        //if(pag.render)
+        dispatch(getDogs('', 'ASC', 'name'))
         dispatch(getTemperaments())
     }, [dispatch])
     

@@ -21,6 +21,7 @@ export function getDogs(temps, how, what) {
                 .catch((err) => console.log('error get 1', err));
         };
     } else {
+        console.log('AAAAAAAAAAAAAAAA', how, what);
         return (dispatch) => {
             axios
                 .get(`/dogs?how=${how}&what=${what}`)

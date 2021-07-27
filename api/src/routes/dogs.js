@@ -16,19 +16,85 @@ router.get('/', async (req, res, next) => {
         // Dog.findAll({include: {model: Temperament}, order: [[what, how]]})
         //     .then((response) => res.send(response))
         //     .catch((err) => next(err));
-        try {
-            let dogs = await axios.get('https://api.thedogapi.com/v1/breeds/');
-            Dog.findAll({include: {model: Temperament}, order: [[what, how]]})
-                .then((response) => res.send(response.concat(dogs.data)))
-                .catch((err) => next(err));
-        } catch (err) {
-            console.log('a');
+        // try {
+        //     let dogs = await axios.get('https://api.thedogapi.com/v1/breeds/');
+        //     Dog.findAll({include: {model: Temperament}, order: [[what, how]]})
+        //         .then((response) => res.send(response.concat(dogs.data)))
+        //         .catch((err) => next(err));
+        // } catch (err) {
+        //     console.log('a');
+        // }
+
+        async function fillUp() {
+            try {
+                const response = await axios.get('https://api.thedogapi.com/v1/breeds/');
+                response.data.map((dog) => {
+                    if (dog.temperament) {
+                        let temp = dog.temperament.replace(/\s/g, '').split(',');
+                        temp.map(async (tem) => {
+                            await Temperament.findOrCreate({
+                                where: {name: tem},
+                                defaults: {
+                                    name: tem,
+                                },
+                            });
+                        });
+                    }
+                });
+
+                response.data.map(async (dog) => {
+                    try {
+                        let aux = dog.weight.metric.replace(/\s/g, '').split('-');
+                        let min = parseInt(aux[0]);
+                        let max = parseInt(aux[1]);
+                        if (isNaN(min)) {
+                            min = parseInt(max) - 1;
+                            if (isNaN(max)) {
+                                min = 1;
+                                max = 2;
+                            }
+                        }
+                        if (isNaN(max)) {
+                            max = parseInt(min) + 1;
+                        }
+                        var newDog = await Dog.create({
+                            name: dog.name,
+                            weight_min: min,
+                            weight_max: max,
+                            height: dog.height.metric,
+                            life_span: dog.life_span,
+                            img: dog.image.url,
+                            created: 'false',
+                        });
+                    } catch (err) {
+                        console.log('error api app 1');
+                    }
+                    if (dog.temperament) {
+                        var temp = dog.temperament.replace(/\s/g, '').split(',');
+                        temp.map(async (tem) => {
+                            try {
+                                var temper = await Temperament.findOne({where: {name: tem}});
+                                newDog.addTemperament(temper);
+                            } catch (err) {
+                                console.log('error api app 2');
+                            }
+                        });
+                    }
+                });
+            } catch (err) {
+                console.log('error api app 3');
+            }
         }
+
+        fillUp();
+
+        setTimeout(() => {
+            Dog.findAll({include: {model: Temperament}, order: [[what, how]]})
+                .then((response) => res.send(response))
+                .catch((err) => next(err));
+        }, 1000);
     }
 });
-
-// https://api.thedogapi.com/v1/breeds
-// GET https://api.thedogapi.com/v1/breeds/search?q={raza_perro}
 
 router.get('/:breedId', (req, res, next) => {
     const {breedId} = req.params;

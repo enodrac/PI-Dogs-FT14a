@@ -12,69 +12,6 @@ const cors = require('cors');
 
 server.name = 'API';
 
-async function fillUp() {
-    try {
-        const response = await axios.get('https://api.thedogapi.com/v1/breeds/');
-        response.data.map((dog) => {
-            if (dog.temperament) {
-                let temp = dog.temperament.replace(/\s/g, '').split(',');
-                temp.map(async (tem) => {
-                    await Temperament.findOrCreate({
-                        where: {name: tem},
-                        defaults: {
-                            name: tem,
-                        },
-                    });
-                });
-            }
-        });
-
-        response.data.map(async (dog) => {
-            try {
-                let aux = dog.weight.metric.replace(/\s/g, '').split('-');
-                let min = parseInt(aux[0]);
-                let max = parseInt(aux[1]);
-                if (isNaN(min)) {
-                    min = parseInt(max) - 1;
-                    if (isNaN(max)) {
-                        min = 1;
-                        max = 2;
-                    }
-                }
-                if (isNaN(max)) {
-                    max = parseInt(min) + 1;
-                }
-                var newDog = await Dog.create({
-                    name: dog.name,
-                    weight_min: min,
-                    weight_max: max,
-                    height: dog.height.metric,
-                    life_span: dog.life_span,
-                    img: dog.image.url,
-                    created: 'false',
-                });
-            } catch (err) {
-                console.log('error api app 1');
-            }
-            if (dog.temperament) {
-                var temp = dog.temperament.replace(/\s/g, '').split(',');
-                temp.map(async (tem) => {
-                    try {
-                        var temper = await Temperament.findOne({where: {name: tem}});
-                        newDog.addTemperament(temper);
-                    } catch (err) {
-                        console.log('error api app 2');
-                    }
-                });
-            }
-        });
-    } catch (err) {
-        console.log('error api app 3');
-    }
-}
-
-// fillUp();
-
 server.use(express.json());
 // server.use(bodyParser.urlencoded({extended: true, limit: '50mb'}));
 // server.use(bodyParser.json({limit: '50mb'}));
