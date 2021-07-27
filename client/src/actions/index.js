@@ -16,14 +16,14 @@ export function getDogs(temps, how, what) {
     if (temps instanceof Array) {
         return (dispatch) => {
             axios
-                .get(`http://localhost:3001/dogs?temps=${temps}`)
+                .get(`/dogs?temps=${temps}`)
                 .then((response) => dispatch({type: SET_DOGS, payload: response.data}))
                 .catch((err) => console.log('error get 1', err));
         };
     } else {
         return (dispatch) => {
             axios
-                .get(`http://localhost:3001/dogs?how=${how}&what=${what}`)
+                .get(`/dogs?how=${how}&what=${what}`)
                 .then((response) => dispatch({type: SET_DOGS, payload: response.data}))
                 .catch((err) => console.log('error get 2', err));
         };
@@ -33,7 +33,7 @@ export function getDogs(temps, how, what) {
 export function getDetail(breedId) {
     return (dispatch) => {
         axios
-            .get(`http://localhost:3001/dogs/${breedId}`)
+            .get(`/dogs/${breedId}`)
             .then((response) => dispatch({type: SET_DETAIL, payload: response.data}))
             .catch((err) => console.log('error get 3', err));
     };
@@ -42,7 +42,7 @@ export function getDetail(breedId) {
 export function getTemperaments() {
     return (dispatch) => {
         axios
-            .get(`http://localhost:3001/temperament`)
+            .get(`/temperament`)
             .then((response) => dispatch({type: SET_TEMPERAMENTS, payload: response.data}))
             .catch((err) => console.log('error get 4', err));
     };
@@ -55,13 +55,13 @@ export function resetDetail() {
 }
 
 export async function getUser({email, password}) {
-    return axios.get(`http://localhost:3001/user?email=${email}&password=${password}`);
+    return axios.get(`/user?email=${email}&password=${password}`);
 }
 
 export function getFavorites(name) {
     return (dispatch) => {
         axios
-            .get(`http://localhost:3001/user/favorites?name=${name}`)
+            .get(`/user/favorites?name=${name}`)
             .then((response) => dispatch({type: SET_FAVORITES, payload: response.data}))
             .catch((err) => console.log('error get 5', err));
     };
@@ -72,15 +72,15 @@ export function getFavorites(name) {
 //POST
 
 export async function createDog(dog) {
-    return axios.post(`http://localhost:3001/dogs`, dog);
+    return axios.post(`/dogs`, dog);
 }
 
 export async function createUser(user) {
-    return axios.post(`http://localhost:3001/user`, user);
+    return axios.post(`/user`, user);
 }
 
 export function addFavorite(breedId, name) {
-    axios.post(`http://localhost:3001/user/add`, {breedId, name});
+    axios.post(`/user/add`, {breedId, name});
 }
 
 //POST
@@ -94,5 +94,5 @@ export function updateDog() {}
 //DELETE
 
 export function deleteDog(breedId) {
-    axios.delete(`http://localhost:3001/dogs/${breedId}`);
+    axios.delete(`/dogs/${breedId}`);
 }
