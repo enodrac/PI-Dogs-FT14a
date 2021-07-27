@@ -3,7 +3,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 export default function Dog({dog}){
-    
     return(
 
         <Link className={styles.link_dog} to={`/detail/:${dog.id}` }>
@@ -20,13 +19,13 @@ export default function Dog({dog}){
                         <img className={styles.dog_img} src={dog.img} alt="" />
                     </div>
 
-                    <div className={styles.div_dog_temperaments}>
+                    {/* <div className={styles.div_dog_temperaments}>
                         {dog.Temperaments.map(t => (
                             <div  key={t.id}>
                                 <label>{t.name}</label>
                             </div>
                         ))}
-                    </div>
+                    </div> */}
 
                 </div>
 

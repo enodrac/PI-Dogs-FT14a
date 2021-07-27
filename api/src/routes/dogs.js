@@ -2,7 +2,7 @@ const router = require('express').Router();
 const {default: axios} = require('axios');
 const {Dog, Temperament} = require('../db');
 
-router.get('/', (req, res, next) => {
+router.get('/', async (req, res, next) => {
     let {temps, how, what} = req.query;
     if (temps) {
         Dog.findAll({include: {model: Temperament, where: {name: temps}, order: [['id', 'ASC']]}})
@@ -16,10 +16,14 @@ router.get('/', (req, res, next) => {
         // Dog.findAll({include: {model: Temperament}, order: [[what, how]]})
         //     .then((response) => res.send(response))
         //     .catch((err) => next(err));
-        axios
-            .get('https://api.thedogapi.com/v1/breeds/')
-            .then((response) => res.send(response))
-            .catch((err) => console.log('a'));
+        try {
+            let dogs = await axios.get('https://api.thedogapi.com/v1/breeds/');
+            Dog.findAll({include: {model: Temperament}, order: [[what, how]]})
+                .then((response) => res.send(response.concat(dogs.data)))
+                .catch((err) => next(err));
+        } catch (err) {
+            console.log('a');
+        }
     }
 });
 
