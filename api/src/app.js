@@ -8,6 +8,7 @@ const {Dog, Temperament} = require('./db');
 require('./db.js');
 
 const server = express();
+const cors = require('cors');
 
 server.name = 'API';
 
@@ -88,6 +89,8 @@ server.use((req, res, next) => {
 });
 
 server.use(express.urlencoded({extended: true}));
+
+server.use(cors());
 
 server.use('/', routes);
 
