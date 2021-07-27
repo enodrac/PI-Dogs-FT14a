@@ -13,11 +13,18 @@ router.get('/', (req, res, next) => {
             how = 'ASC';
             what = 'name';
         }
-        Dog.findAll({include: {model: Temperament}, order: [[what, how]]})
+        // Dog.findAll({include: {model: Temperament}, order: [[what, how]]})
+        //     .then((response) => res.send(response))
+        //     .catch((err) => next(err));
+        axios
+            .get('https://api.thedogapi.com/v1/breeds/')
             .then((response) => res.send(response))
-            .catch((err) => next(err));
+            .catch((err) => console.log('a'));
     }
 });
+
+// https://api.thedogapi.com/v1/breeds
+// GET https://api.thedogapi.com/v1/breeds/search?q={raza_perro}
 
 router.get('/:breedId', (req, res, next) => {
     const {breedId} = req.params;

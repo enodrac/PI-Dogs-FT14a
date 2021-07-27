@@ -72,7 +72,7 @@ async function fillUp() {
     }
 }
 
-fillUp();
+// fillUp();
 
 server.use(express.json());
 // server.use(bodyParser.urlencoded({extended: true, limit: '50mb'}));
