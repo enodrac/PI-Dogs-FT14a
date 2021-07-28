@@ -2,16 +2,12 @@
 import styles from './Detail.module.css'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-// import { useHistory } from 'react-router-dom';
 import {  getDetail, addFavorite, resetDetail} from '../../actions';
 import Loading from '../loading/Loading'
 
-
 function Detail() {
-    // const pag = useSelector((state) => state.pag);
     const detailStore = useSelector((state) => state.detail);
     const dispatch = useDispatch()
-    // const history = useHistory()
 
     const [loading, setLoading] = useState(true)
 
@@ -21,23 +17,16 @@ function Detail() {
          return () => {dispatch(resetDetail())}
     },[dispatch])
 
-    // function handleDelete(){
-    //     deleteDog(detailStore.id)
-    //     dispatch({type:'SET_PAG',payload:{...pag,c:0, render:true}})
-    //     dispatch(resetDetail())
-    //     history.push('/home')
-    // }
-
     function handleAdd(){
         addFavorite(detailStore.id,sessionStorage.getItem('userName'))
     }
 
     return (
-        <div>
+        <div className={styles.detail_container}>
             {detailStore.id ?
                 <div>
                    
-                    <div className={styles.detail_container}>
+                    <div>
 
                         <div className={styles.frame}>
                             <img className={styles.detail_img} src={detailStore.img} alt="" />
@@ -48,8 +37,6 @@ function Detail() {
                              <h1>Dog detail</h1>
 
                              <div className={styles.div_delFav}>
-
-                                {/* <button className={styles.delete_button} onClick={() => handleDelete()}>Delete</button> */}
 
                                 <div>{sessionStorage.getItem('userName') !== null ?
                                     <button className={styles.delete_button} onClick={() => handleAdd()}>
