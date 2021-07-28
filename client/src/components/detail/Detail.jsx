@@ -26,7 +26,7 @@ function Detail() {
             {detailStore.id ?
                 <div>
                    
-                    <div>
+                    <div className={styles.detail_container}>
 
                         <div className={styles.frame}>
                             <img className={styles.detail_img} src={detailStore.img} alt="" />
