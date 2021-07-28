@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 // import { useHistory } from 'react-router-dom';
 import {  getDetail, addFavorite, resetDetail} from '../../actions';
-import Loading from '../Loading/Loading'
+import Loading from '../loading/Loading'
 
 
 function Detail() {
