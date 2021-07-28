@@ -57,14 +57,16 @@ router.get('/', async (req, res, next) => {
                         if (isNaN(max)) {
                             max = parseInt(min) + 1;
                         }
-                        var newDog = await Dog.create({
-                            name: dog.name,
-                            weight_min: min,
-                            weight_max: max,
-                            height: dog.height.metric,
-                            life_span: dog.life_span,
-                            img: dog.image.url,
-                            created: 'false',
+                        var [newDog, _created] = await Dog.findOrCreate({
+                            where: {name: dog.name},
+                            defaults: {
+                                weight_min: min,
+                                weight_max: max,
+                                height: dog.height.metric,
+                                life_span: dog.life_span,
+                                img: dog.image.url,
+                                created: 'false',
+                            },
                         });
                     } catch (err) {
                         console.log('error api app 1');
