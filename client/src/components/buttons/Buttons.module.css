@@ -1,35 +1,43 @@
-.render_div {
-    display: flex;
-    flex-direction: column;
-    margin-top: 30px;
-}
-
-.div_inputs {
+.div_dogs_buttons {
     display: flex;
     position: relative;
     justify-content: center;
     align-items: center;
+    margin-top: 30px;
     margin-bottom: 30px;
 }
-.div_dogs_container {
-    display: flex;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
-}
 
-.home_link {
+.prev {
     padding: 10px;
     font-size: 24px;
-    color: white;
+    color: #fff;
+    background: linear-gradient(0deg, #0caadc 0%, #279abd 100%);
     border: none;
     border-radius: 15px;
-    background: linear-gradient(0deg, #0caadc 0%, #279abd 100%);
     box-shadow: 0 9px #0b6783;
-    justify-content: center;
-    text-decoration: none;
+    position: absolute;
+    margin-left: -460px;
 }
 
-.home_link:active {
+.next {
+    padding: 10px;
+    font-size: 24px;
+    color: #fff;
+    background: linear-gradient(0deg, #0caadc 0%, #279abd 100%);
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #0b6783;
+    position: absolute;
+    margin-left: 460px;
+}
+
+.next:active {
+    background: #4ed6ff;
+    box-shadow: 0 5px #0b6783;
+    transform: translateY(4px);
+}
+
+.prev:active {
     background: #4ed6ff;
     box-shadow: 0 5px #0b6783;
     transform: translateY(4px);
@@ -57,12 +65,8 @@
     transform: translateY(4px);
 }
 
-/* 
-    color pallet
-    001021
-    034748
-    1481BA
-    11B5E4
-    0CAADC
-
-*/
+.index:active {
+    background: #4ed6ff;
+    box-shadow: 0 5px #0b6783;
+    transform: translateY(4px);
+}

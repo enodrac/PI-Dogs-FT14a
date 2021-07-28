@@ -1,28 +1,32 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import styles from './Detail.module.css'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { deleteDog, getDetail, addFavorite, resetDetail} from '../../actions';
+// import { useHistory } from 'react-router-dom';
+import {  getDetail, addFavorite, resetDetail} from '../../actions';
+import Loading from '../Loading/Loading'
 
 
 function Detail() {
-    const pag = useSelector((state) => state.pag);
+    // const pag = useSelector((state) => state.pag);
     const detailStore = useSelector((state) => state.detail);
     const dispatch = useDispatch()
-    const history = useHistory()
+    // const history = useHistory()
+
+    const [loading, setLoading] = useState(true)
 
     useEffect(()=>{
         dispatch(getDetail(parseInt(window.location.href.split(':').pop())))
+        if(detailStore.length)setLoading(false)
          return () => {dispatch(resetDetail())}
     },[dispatch])
 
-    function handleDelete(){
-        deleteDog(detailStore.id)
-        dispatch({type:'SET_PAG',payload:{...pag,c:0, render:true}})
-        dispatch(resetDetail())
-        history.push('/home')
-    }
+    // function handleDelete(){
+    //     deleteDog(detailStore.id)
+    //     dispatch({type:'SET_PAG',payload:{...pag,c:0, render:true}})
+    //     dispatch(resetDetail())
+    //     history.push('/home')
+    // }
 
     function handleAdd(){
         addFavorite(detailStore.id,sessionStorage.getItem('userName'))
@@ -45,11 +49,7 @@ function Detail() {
 
                              <div className={styles.div_delFav}>
 
-                                {/* <Link to={'/home'}>
-                                    <button className={styles.delete_button} onClick={() => deleteDog(detailStore.id)}>Delete</button>
-                                </Link> */}
-
-                                    <button className={styles.delete_button} onClick={() => handleDelete()}>Delete</button>
+                                {/* <button className={styles.delete_button} onClick={() => handleDelete()}>Delete</button> */}
 
                                 <div>{sessionStorage.getItem('userName') !== null ?
                                     <button className={styles.delete_button} onClick={() => handleAdd()}>
@@ -85,9 +85,9 @@ function Detail() {
                     </div>
 
                 </div>
-                : 
-                <h2>The dog doesn't exist</h2>
-            }
+                : loading ?
+                <Loading/>
+                    :<img src="https://media1.tenor.com/images/a9a498ac40f5a940f838587eb9d26e89/tenor.gif?itemid=14502312" alt="" />}
         </div>
     )
 }

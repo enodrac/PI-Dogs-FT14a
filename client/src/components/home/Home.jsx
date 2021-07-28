@@ -5,8 +5,10 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import {getDogs, getTemperaments } from '../../actions/index'
 import { useDispatch, useSelector } from "react-redux";
-import {pageCount,handleSearch,handleAddTemp,handleSelected,handleRemoveTemp,handleOrder,handlePages,handleChangeItems} from '../../utils/Utils'
+import {pageCount,handleSearch,handleAddTemp,handleSelected,handleRemoveTemp,handleOrder,handleChangeItems} from '../../utils/Utils'
 import Dog from '../dog/Dog'
+import Loading from '../loading/Loading'
+import Buttons from '../buttons/Buttons'
 
 export default function Home() {
     
@@ -17,10 +19,10 @@ export default function Home() {
     const dispatch = useDispatch()
 
     const [temperament, setTemperament] = useState([])
+    const [loading, setLoading] = useState(true)
     
     useEffect(() => {
-        //if(pag.render)
-        dispatch(getDogs('', 'ASC', 'name'))
+        if(pag.render)dispatch(getDogs('', 'ASC', 'name'))
         dispatch(getTemperaments())
     }, [dispatch])
     
@@ -36,6 +38,7 @@ export default function Home() {
         if(pag.c > 2){
             dispatch({type:'SET_PAG',payload:{...pag, render:false}}) 
         }
+        if(selectedStore.length)setLoading(false)
     }, [selectedStore])
 
     return (
@@ -45,7 +48,7 @@ export default function Home() {
 
                 <div >
                     { sessionStorage.getItem('userName') !== null?
-                        <Link className={styles.home_link} to={'/create'} >Create Dogs</Link>:null
+                        <Link className={styles.home_link} to={'/create'} >Create Dogs</Link>: <label className={styles.home_link}>Login to create dogs</label>
                     }
 
                     <input onChange={(e) => handleSearch(e, dogsStore, selectedStore, dispatch,pag) } type="text" placeholder='Breed' />
@@ -99,20 +102,7 @@ export default function Home() {
 
             </div>
 
-            <div className={styles.div_dogs_buttons}>
-
-                <button className={styles.prev} onClick={() => handlePages('-', pag.items, pag.max, selectedStore, dispatch, pag)}>prev</button>
-
-                    {pag.max.map((e,i) => {
-                        if(i > pag.n - 5 && i < pag.n + 5){ 
-                            let className = e === pag.n ? 'click-index' : 'index'
-                            return <button className={styles[className]} key={e} onClick={() => handlePages(e, pag.items, pag.max, selectedStore, dispatch, pag)}>{e}</button>
-                        }
-                    })}
-                
-                <button className={styles.next} onClick={() => handlePages('+', pag.items, pag.max, selectedStore, dispatch, pag)}>next</button>
-
-            </div>
+            <Buttons/>
 
             <div className={styles.div_dogs_container}>
                 {pag.pages.length ?
@@ -126,9 +116,13 @@ export default function Home() {
 
                     ))
 
-                    : <h1 className={styles.error}>that dog doesn't exist</h1>}
+                    : loading ?
+                        <Loading/>
+                            :<img src="https://media1.tenor.com/images/a9a498ac40f5a940f838587eb9d26e89/tenor.gif?itemid=14502312" alt="" />}
 
             </div>
+
+            <Buttons/>
 
         </div>
     )
