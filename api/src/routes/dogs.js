@@ -13,17 +13,6 @@ router.get('/', async (req, res, next) => {
             how = 'ASC';
             what = 'name';
         }
-        // Dog.findAll({include: {model: Temperament}, order: [[what, how]]})
-        //     .then((response) => res.send(response))
-        //     .catch((err) => next(err));
-        // try {
-        //     let dogs = await axios.get('https://api.thedogapi.com/v1/breeds/');
-        //     Dog.findAll({include: {model: Temperament}, order: [[what, how]]})
-        //         .then((response) => res.send(response.concat(dogs.data)))
-        //         .catch((err) => next(err));
-        // } catch (err) {
-        //     console.log('a');
-        // }
 
         async function fillUp() {
             try {
